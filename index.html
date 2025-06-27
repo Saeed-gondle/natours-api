@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Lambda - Asian Cuisine</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <style>
+        /* Add extra styling or overrides here if needed */
+        #three-container {
+            width: 100%;
+            height: 400px;
+        }
+
+        /* Additional styling for enhanced appearance */
+        .hero-text {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+        }
+
+        /* Animate hover on dishes */
+        .dish-card:hover {
+            transform: scale(1.03);
+            transition: transform 0.3s ease-in;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-900 font-sans">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex flex-col items-center">
+        <h1 class="text-3xl font-bold">Lambda: Asian Cuisine</h1>
+        <p class="hero-text text-center mt-2 max-w-xl">
+            Experience the finest Asian cuisine in Faisalabad, Pakistan, with a contemporary twist on tradition.
+        </p>
+    </header>
+
+    <!-- Hero Section with 3D Scene -->
+    <section class="flex flex-col items-center p-6">
+        <div id="three-container" class="my-6"></div>
+        <button id="reserveBtn"
+            class="px-6 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 transition">
+            Reserve a Table
+        </button>
+    </section>
+
+    <!-- Menu & Dishes -->
+    <section class="p-6">
+        <h2 class="text-2xl font-bold mb-4">Signature Dishes</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Dish cards -->
+            <div class="dish-card border rounded p-4 hover:shadow-lg">
+                <img src="https://via.placeholder.com/300" alt="Dish 1" />
+                <h3 class="text-xl font-semibold mt-2">Dish Name</h3>
+                <p class="text-sm text-gray-600">Description...</p>
+            </div>
+            <!-- Repeat for more dishes -->
+        </div>
+    </section>
+
+    <!-- Image Gallery -->
+    <section class="p-6">
+        <h2 class="text-2xl font-bold mb-4">Image Gallery</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <img src="https://via.placeholder.com/300" alt="Gallery Image" class="rounded" />
+            <!-- More images -->
+        </div>
+    </section>
+
+    <!-- Location -->
+    <section class="p-6 bg-white">
+        <h2 class="text-2xl font-bold mb-4">Location</h2>
+        <p>Faisalabad, Pakistan</p>
+    </section>
+
+    <!-- Reviews -->
+    <section class="p-6">
+        <h2 class="text-2xl font-bold mb-4">User Reviews</h2>
+        <div class="space-y-4">
+            <div class="bg-gray-200 p-4 rounded">"Amazing food..."</div>
+            <!-- More reviews -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="p-6 text-center text-sm bg-gray-800 text-white">
+        &copy; 2025 Lambda Restaurant. All rights reserved.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.143.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.5/dist/gsap.min.js"></script>
+
+    <script>
+        // Three.js Scene with real-time animation
+        let scene, camera, renderer, cube, sphere;
+        let clock = new THREE.Clock();
+
+        function init3D() {
+            const container = document.getElementById('three-container');
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(
+                75,
+                container.clientWidth / container.clientHeight,
+                0.1,
+                1000
+            );
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            // Simple rotating cube
+            const geometryCube = new THREE.BoxGeometry();
+            const materialCube = new THREE.MeshBasicMaterial({ color: 0xff0055 });
+            cube = new THREE.Mesh(geometryCube, materialCube);
+            scene.add(cube);
+
+            // Additional shape: a sphere that bounces
+            const geometrySphere = new THREE.SphereGeometry(0.5, 32, 32);
+            const materialSphere = new THREE.MeshBasicMaterial({ color: 0x00ff88 });
+            sphere = new THREE.Mesh(geometrySphere, materialSphere);
+            sphere.position.x = 2;
+            scene.add(sphere);
+
+            camera.position.z = 5;
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            let delta = clock.getDelta();
+
+            // Rotate cube continuously
+            cube.rotation.x += 0.5 * delta;
+            cube.rotation.y += 0.3 * delta;
+
+            // Make the sphere bounce up/down for a simple "real-time" animation
+            sphere.position.y = Math.sin(clock.elapsedTime * 2) * 1;
+
+            renderer.render(scene, camera);
+        }
+
+        // GSAP Animation
+        $(document).ready(() => {
+            init3D();
+            gsap.from("header", { y: -100, opacity: 0, duration: 1 });
+            gsap.from("section", { y: 50, opacity: 0, duration: 1, stagger: 0.2 });
+            gsap.from("footer", { y: 100, opacity: 0, duration: 1, delay: 0.5 });
+
+            $("#reserveBtn").on("click", () => {
+                alert("Table reserved!");
+            });
+        });
+    </script>
+    <script>
+        (async () => {
+            try {
+                const response = await fetch('http://localhost:3000/api/v1/tours', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: 'New Forest Trail v5',
+                        rate: 5.0,
+                        price: 300
+                    })
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        })();
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+Create a LMS called Codemy
+Core Features:
+1. User Roles & Auth:
+   - Seller, Buyer & Admin
+   - OAuth (Google, Facebook) 
+   - OTP-based verification
+   - JWT token authentication
+   - Password reset
+2. Seller Features:
+   - Course creation & management
+   - Content organize (sections, lectures, quizzes)
+   - Upload video content + preview
+   - Attach supplementary materials
+   - Analytics dashboard
+   - Revenue tracking
+   - Student engagement metrics
+3. Buyer Features:
+   - Course browsing &advanced filters
+   - Free preview sections
+   - Secure payment
+   - Lifetime course access
+   - Progress tracking
+   - Interactive quizzes
+   - Course ratings and reviews
+   - Q&A section participation
+   - Personalized learning path
+4. Admin:
+   - Course moderation & approval system
+   - User management
+   - Content quality monitoring
+   - Revenue analytics
+   - System configuration
+   - Support ticket management
+   - Content flagging system
+5. Technical Requirements:
+   - Frontend: React.js +Next.js
+   - Backend: Node.js &Express
+   - Db: MongoDB
+   - Real-time: Socket.io
+   - Payment: Stripe
+   - Video hosting: AWS S3
+   - CDN implemen
+   - Redis for caching
+   - Elasticsearch for search 
+6. UI/UX Elements:
+   - GSAP 
+   - Three.js
+   - Responsive design
+   - Accessibility compliance
+   - Dark/Light mode
+   - Interactive player
+7. Additional Features:
+   - Subscription plans
+   - Bulk course purchases
+   - Gift courses
+   - Affiliate program
+   - Course bundles
+   - Mobile app integration
+   - Offline access
+   - Multi-language
