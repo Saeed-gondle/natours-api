@@ -2,6 +2,8 @@
 
 A complete Node.js RESTful API for a fictional tours company, built with Express, MongoDB, and Mongoose. This project demonstrates best practices in API design, authentication, security, and documentation.
 
+> **📚 Learning Project**: This API is originally developed by [Jonas Schmedtmann](https://github.com/jonasschmedtmann) as part of his comprehensive Node.js course. This repository represents my learning journey and rebuilding of the API to master Node.js, Express, and MongoDB development concepts taught in Jonas's excellent course.
+
 ---
 
 ## 🚀 Features
@@ -110,9 +112,13 @@ See full details in the documentation.
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 Credits & Author
 
-- [Muhammad Saeed](https://github.com/your-username)
+**Original Course & API Design**: [Jonas Schmedtmann](https://github.com/jonasschmedtmann) - The Complete Node.js Developer Course
+
+**Learning Implementation**: [Muhammad Saeed](https://github.com/Saeed-gondle) - Rebuilt for learning purposes
+
+> 🙏 **Special Thanks**: Huge appreciation to Jonas Schmedtmann for creating such an comprehensive and practical Node.js course. This project serves as a testament to the quality of his teaching and the depth of knowledge gained through his course.
 
 ---
 
