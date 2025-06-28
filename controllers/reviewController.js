@@ -1,8 +1,13 @@
 import Review from '../models/reviewModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
-import { deleteOne } from './handleFactory.js';
-
+import { deleteOne, createOne } from './handleFactory.js';
+export const setTourUserIds = (req, res, next) => {
+  // Allow nested routes
+  if (!req.body.tour) req.body.tour = req.params.tourId;
+  if (!req.body.user) req.body.user = req.user.id;
+  next();
+};
 export const getAllReviews = catchAsync(async (req, res, next) => {
   // Allow nested routes
   let filter = {};
@@ -33,16 +38,5 @@ export const getReview = catchAsync(async (req, res, next) => {
     },
   });
 });
-export const createReview = catchAsync(async (req, res, next) => {
-  // Allow nested routes
-  if (!req.body.tour) req.body.tour = req.params.tourId;
-  if (!req.body.user) req.body.user = req.user.id;
-  const newReview = await Review.create(req.body);
-  res.status(201).json({
-    status: 'success',
-    data: {
-      review: newReview,
-    },
-  });
-});
+export const createReview = createOne(Review);
 export const deleteReview = deleteOne(Review);

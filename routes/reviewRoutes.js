@@ -6,6 +6,6 @@ const router = express.Router({ mergeParams: true});
 
 router.get('/', reviewController.getAllReviews);
 router.get('/:id', reviewController.getReview);
-router.post('/', protect, restrictTo('user'), reviewController.createReview);
+router.post('/', protect, restrictTo('user'), reviewController.setTourUserIds, reviewController.createReview);
 
 export default router;
