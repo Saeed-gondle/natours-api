@@ -2,7 +2,13 @@ import Tour from '../models/tourModel.js';
 import ApiFeatures from '../utils/apiFeatures.js';
 import catchAsync from '../utils/catchAsync.js';
 import appError from '../utils/appError.js';
-import { deleteOne, updateOne, createOne, getOne } from './handleFactory.js';
+import {
+  deleteOne,
+  updateOne,
+  createOne,
+  getOne,
+  getAll,
+} from './handleFactory.js';
 import { get } from 'mongoose';
 export const aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
@@ -11,20 +17,7 @@ export const aliasTopTours = (req, res, next) => {
   next();
 };
 
-export const getAllTours = catchAsync(async (req, res, next) => {
-  const features = new ApiFeatures(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const tours = await features.query;
-
-  res.status(200).json({
-    status: 'success',
-    results: tours.length,
-    data: { tours },
-  });
-});
+export const getAllTours = getAll(Tour);
 
 export const getTour = getOne(Tour, { path: 'reviews' });
 
