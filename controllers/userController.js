@@ -1,7 +1,13 @@
 import User from '../models/userModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
-import { deleteOne, getOne, updateOne ,createOne} from './handleFactory.js';
+import {
+  deleteOne,
+  getOne,
+  updateOne,
+  createOne,
+  getAll,
+} from './handleFactory.js';
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
   Object.keys(obj).forEach(el => {
@@ -9,16 +15,7 @@ const filterObj = (obj, ...allowedFields) => {
   });
   return newObj;
 };
-export const getAllUsers = catchAsync(async (req, res) => {
-  const users = await User.find();
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: {
-      users,
-    },
-  });
-});
+export const getAllUsers = getAll(User);
 export const getUser = getOne(User);
 export const createUser = createOne(User);
 export const updateUser = updateOne(User);
@@ -50,7 +47,7 @@ export const getMe = (req, res, next) => {
   req.params.id = req.user.id; // Overwrite the ID to the current user
   next();
 };
-export const deleteMe = catchAsync(async (req, res, next) => {  
+export const deleteMe = catchAsync(async (req, res, next) => {
   // 1) Find the user and set active to false
   await User.findByIdAndUpdate(req.user.id, { active: false });
   // 2) Log the user out by sending no token

@@ -141,5 +141,7 @@ toursSchema.virtual('reviews', {
   foreignField: 'tour',
   localField: '_id'
 });
+toursSchema.index({ price: 1, ratingsAverage: -1 });
+toursSchema.index({ slug: 1 });
 const Tours = mongoose.model('Tours', toursSchema);
 export default Tours;
