@@ -9,12 +9,16 @@
     "start:script": "nodemon script.js",
     "start:prod": "cross-env NODE_ENV=production nodemon server.js",
     "debug": "ndb server.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build:js": "parcel build ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
+    "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
   },
   "author": "Muhammad Saeed",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.11.0",
     "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^7.0.0",
@@ -29,6 +33,7 @@
     "morgan": "^1.9.1",
     "node-fetch": "^3.3.2",
     "nodemailer": "^6.10.0",
+    "pug": "^3.0.3",
     "validator": "^13.12.0",
     "xss": "^1.0.15",
     "xss-clean": "^0.1.4"
@@ -44,6 +49,7 @@
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
     "ndb": "^1.1.5",
+    "parcel-bundler": "^1.12.5",
     "prettier": "^1.17.0"
   }
 }

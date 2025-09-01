@@ -39,7 +39,7 @@ reviewSchema.pre(/^find/, function(next) {
   });
   this.populate({
     path: 'user',
-    select: 'name',
+    select: 'name photo',
   });
   next();
 });
@@ -71,7 +71,6 @@ reviewSchema.statics.calcAverageRatings = async function(tourId) {
   console.log(stats);
 };
 reviewSchema.post('save', function() {
-  console.log('this.tour outside', this.tour);
   this.constructor.calcAverageRatings(this.tour);
 });
 reviewSchema.pre(/^findOneAnd/, async function(next) {

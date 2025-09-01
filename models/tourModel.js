@@ -144,5 +144,6 @@ toursSchema.virtual('reviews', {
 });
 toursSchema.index({ price: 1, ratingsAverage: -1 });
 toursSchema.index({ slug: 1 });
+toursSchema.index({ startLocation: '2dsphere' });
 const Tours = mongoose.model('Tours', toursSchema);
 export default Tours;

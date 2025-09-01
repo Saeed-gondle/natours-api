@@ -1,0 +1,38 @@
+{
+  "pugBeautify.config": {
+    "fill_tab": false,
+    "omit_div": true,
+    "tab_size": 4,
+    "wrap_line_length": 120,
+    "omit_semicolons": false,
+    "wrap_attributes": "auto",
+    "sort_attributes": false,
+    "wrap_attributes_min_attrs": 2,
+    "wrap_attributes_indent_size": 4
+  },
+  "[pug]": {
+    "editor.defaultFormatter": "ducfilan.pug-formatter",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  },
+  "[jade]": {
+    "editor.defaultFormatter": "ducfilan.pug-formatter",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  },
+  "files.associations": {
+    "*.pug": "jade",
+    "*.jade": "jade",
+    "Views/*.pug": "pug"
+  },
+  "emmet.includeLanguages": {
+    "pug": "html",
+    "jade": "html"
+  },
+  "pug.complete": true,
+  "pug.validate": true
+}
