@@ -24,6 +24,11 @@ const port = process.env.PORT || 3000;
 const connectDB = async () => {
   try {
     console.log('🔄 Connecting to MongoDB Atlas...');
+    console.log(
+      '🌐 Using connection string:',
+      process.env.CONNECTION_STR.replace(/:[^:@]*@/, ':****@')
+    );
+
     const clientOptions = {
       serverApi: { version: '1', strict: true, deprecationErrors: true },
       maxPoolSize: 10,
@@ -41,7 +46,7 @@ const connectDB = async () => {
     // Start the server after successful DB connection
     server = app.listen(port, () => {
       console.log(`🚀 App running on port ${port}...`);
-      console.log(`📖 API Documentation: http://localhost:${port}/api/v1/docs`);
+      console.log(`📖 API Documentation: http://localhost:${port}/api`);
     });
   } catch (error) {
     console.error('❌ MongoDB Atlas connection failed:');
