@@ -1,5 +1,9 @@
-import app from './app.js';
 import dotenv from 'dotenv';
+
+// Load environment variables first, before any other imports
+dotenv.config({ path: './config.env' });
+
+import app from './app.js';
 import mongoose from 'mongoose';
 import dns from 'dns';
 
@@ -13,8 +17,6 @@ process.on('uncaughtException', err => {
   console.log(err.name, err.message);
   process.exit(1);
 });
-
-dotenv.config({ path: './config.env' });
 
 const port = process.env.PORT || 3000;
 
