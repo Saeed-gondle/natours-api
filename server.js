@@ -24,11 +24,6 @@ const port = process.env.PORT || 3000;
 const connectDB = async () => {
   try {
     console.log('🔄 Connecting to MongoDB Atlas...');
-    console.log(
-      '🌐 Using connection string:',
-      process.env.CONNECTION_STR.replace(/:[^:@]*@/, ':****@')
-    );
-
     const clientOptions = {
       serverApi: { version: '1', strict: true, deprecationErrors: true },
       maxPoolSize: 10,
@@ -42,13 +37,11 @@ const connectDB = async () => {
     // Test the connection
     await mongoose.connection.db.admin().command({ ping: 1 });
     console.log('✅ Successfully connected to MongoDB Atlas!');
-    console.log('🏓 Database ping successful!');
-    console.log('📊 Connected to database:', mongoose.connection.name);
 
     // Start the server after successful DB connection
     server = app.listen(port, () => {
       console.log(`🚀 App running on port ${port}...`);
-      console.log(`📖 API Documentation: http://localhost:${port}`);
+      console.log(`📖 API Documentation: http://localhost:${port}/api/v1/docs`);
     });
   } catch (error) {
     console.error('❌ MongoDB Atlas connection failed:');
@@ -56,11 +49,11 @@ const connectDB = async () => {
     console.error('\n🚨 Connection Details:');
     console.error(`   Error Type: ${error.name}`);
     console.error(`   Error Code: ${error.code || 'N/A'}`);
-    console.error('\n💡 Troubleshooting:');
-    console.error('1. MongoDB Compass works, but Node.js fails');
-    console.error('2. This suggests a Node.js DNS or network issue');
-    console.error('3. Try running: npm install --save-dev --legacy-peer-deps');
-    console.error('4. Check if antivirus is blocking Node.js network access');
+    // console.error('\n💡 Troubleshooting:');
+    // console.error('1. MongoDB Compass works, but Node.js fails');
+    // console.error('2. This suggests a Node.js DNS or network issue');
+    // console.error('3. Try running: npm install --save-dev --legacy-peer-deps');
+    // console.error('4. Check if antivirus is blocking Node.js network access');
 
     process.exit(1);
   }
