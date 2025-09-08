@@ -10,7 +10,7 @@ export const getCheckoutSession = catchAsync(async (req, res, next) => {
     return next(new AppError('Stripe configuration error. Please contact support.', 500));
   }
   
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); 
   
   // 2) Get the currently booked tour
   const tour = await Tour.findById(req.params.tourId);

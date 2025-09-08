@@ -24,11 +24,6 @@ const port = process.env.PORT || 3000;
 const connectDB = async () => {
   try {
     console.log('🔄 Connecting to MongoDB Atlas...');
-    console.log(
-      '🌐 Using connection string:',
-      process.env.CONNECTION_STR.replace(/:[^:@]*@/, ':****@')
-    );
-
     const clientOptions = {
       serverApi: { version: '1', strict: true, deprecationErrors: true },
       maxPoolSize: 10,
