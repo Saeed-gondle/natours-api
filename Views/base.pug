@@ -1,28 +1,31 @@
 doctype html
 html(lang="en")
-  head
-    block head
-      meta(charset="UTF-8")
-      meta(name="viewport" content="width=device-width, initial-scale=1.0")
-      title Natours | #{title}
-      link(rel="stylesheet" href="/css/style.css")
-      link(rel="icon" type="image/x-icon" href="/img/favicon.png")
-      link(href="https://fonts.googleapis.com/css?family=Lato:300,300i,700" rel="stylesheet")
+    head
+        block head
+            meta(charset="UTF-8")
+            meta(name="viewport" content="width=device-width, initial-scale=1.0")
+            title Natours | #{title}
+            link(rel="stylesheet" href="/css/style.css")
+            if title === 'Natours API Documentation'
+                link(rel="stylesheet" href="/css/api-docs.css")
+            link(rel="icon" type="image/x-icon" href="/img/favicon.png")
+            link(href="https://fonts.googleapis.com/css?family=Lato:300,300i,700" rel="stylesheet")
 
-      //- Leaflet CSS
-      link(rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="")
+            //- Leaflet CSS
+            link(rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="")
 
-  body
-    include components/_header.pug
+    body
+        include components/_header.pug
 
-    block content
-    include components/_footer.pug
+        block content
+        include components/_footer.pug
 
-    //- Leaflet JavaScript
-    script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="")
+        //- Leaflet JavaScript
+        script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="")
 
-    //- Optional: Core-js polyfill for older browsers (if needed)
-    //- script(src="https://unpkg.com/core-js-bundle@3.31.0/minified.js")
+        //- Optional: Core-js polyfill for older browsers (if needed)
+        //- script(src="https://unpkg.com/core-js-bundle@3.31.0/minified.js")
 
-    //- Your custom scripts (bundled)
-    script(src="/js/bundle.js")
+        //- Your custom scripts (bundled)
+        script(src="https://js.stripe.com/basil/stripe.js")
+        script(src="/js/bundle.js")

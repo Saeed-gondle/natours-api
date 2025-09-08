@@ -41,7 +41,7 @@ const connectDB = async () => {
     // Start the server after successful DB connection
     server = app.listen(port, () => {
       console.log(`🚀 App running on port ${port}...`);
-      console.log(`📖 API Documentation: http://localhost:${port}/api`);
+      console.log(`📖 API Documentation: http://localhost:${port}/api/v1/docs`);
     });
   } catch (error) {
     console.error('❌ MongoDB Atlas connection failed:');

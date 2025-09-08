@@ -16,7 +16,7 @@ import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize';
 import { xss } from 'express-xss-sanitizer';
 import hpp from 'hpp';
-
+import compression from 'compression';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
@@ -24,6 +24,7 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+app.use(compression());
 // First parse the body
 app.use(
   express.json({
@@ -41,12 +42,14 @@ app.use(
           "'self'",
           'https://unpkg.com',
           'https://cdnjs.cloudflare.com',
+          'https://js.stripe.com',
           "'unsafe-inline'",
         ],
         styleSrc: [
           "'self'",
           'https://unpkg.com',
           'https://fonts.googleapis.com',
+          // Add this line
           "'unsafe-inline'",
         ],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
@@ -58,7 +61,17 @@ app.use(
           'https://server.arcgisonline.com',
           'https://*.basemaps.cartocdn.com',
         ],
-        connectSrc: ["'self'", 'ws://localhost:*', 'wss://localhost:*'],
+        connectSrc: [
+          "'self'",
+          'ws://localhost:*',
+          'wss://localhost:*',
+          'https://api.stripe.com',
+        ],
+        frameSrc: [
+          "'self'",
+          'https://js.stripe.com',
+          'https://hooks.stripe.com',
+        ],
       },
     },
   })
@@ -382,7 +395,6 @@ app.all('*', (req, res, next) => {
 });
 app.use(globalErrorHandler);
 export default app;
-
 
 // "start:prod": "cross-env NODE_ENV=production nodemon server.js",
 //      $env:PORT=3001; npm run start:prod

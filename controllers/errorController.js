@@ -6,8 +6,12 @@ const handleCastErrorDB = err => {
 };
 
 const handleDuplicateFieldsDB = err => {
-  const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
-  console.log(value);
+  // Handle different MongoDB error formats
+  const errorMessage = err.errmsg || err.message || '';
+  const match = errorMessage.match(/(["'])(\\?.)*?\1/);
+  const value = match ? match[0] : 'unknown field';
+
+  console.log('Duplicate field value:', value);
 
   const message = `Duplicate field value: ${value}. Please use another value!`;
   return new AppError(message, 400);
@@ -79,8 +83,6 @@ const sendErrorProd = (err, req, res) => {
 
 const globalErrorHandler = (err, req, res, next) => {
   // console.log(err.stack);
-  console.log('Current NODE_ENV:', process.env.NODE_ENV);
-  console.log('Type of NODE_ENV:', typeof process.env.NODE_ENV);
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 

@@ -1,4 +1,5 @@
 import Tour from '../models/tourModel.js';
+import Booking from '../models/bookingModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
 
@@ -53,3 +54,27 @@ export const getSignupForm = (req, res) => {
     title: 'Create your account',
   });
 };
+
+export const getApiDocs = (req, res) => {
+  res.status(200).render('api-docs', {
+    title: 'Natours API Documentation',
+  });
+};
+export const getMyTours = catchAsync(async (req, res, next) => {
+  // console.log('User:', req.user);
+
+  // 1) Find all bookings WITHOUT population first
+  const bookings = await Booking.find({ user: req.user.id });
+  console.log('Bookings found:', bookings);
+
+  // 2) Find all tours with the booked IDs mmnmmjxdc
+  const tourIds = bookings.map(el => el.tour);
+
+  const tours = await Tour.find({ _id: { $in: tourIds } });
+
+  // 3) Build template
+  res.status(200).render('overview', {
+    title: 'My Tours',
+    tours,
+  });
+});

@@ -2,6 +2,8 @@ import Tour from '../models/tourModel.js';
 import ApiFeatures from '../utils/apiFeatures.js';
 import catchAsync from '../utils/catchAsync.js';
 import appError from '../utils/appError.js';
+import multer from 'multer';
+import sharp from 'sharp';
 import {
   deleteOne,
   updateOne,
@@ -9,7 +11,79 @@ import {
   getOne,
   getAll,
 } from './handleFactory.js';
-import { get } from 'mongoose';
+
+// Configure multer for memory storage
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new appError('Not an image! Please upload only images.', 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+export const uploadTourImages = upload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 3 },
+  // Support for generic 'image' field
+]);
+
+export const resizeTourImages = catchAsync(async (req, res, next) => {
+  if (
+    !req.files ||
+    (!req.files.imageCover && !req.files.images && !req.files.image)
+  )
+    return next();
+
+  // Handle generic 'image' field (treat as imageCover)
+  if (req.files.image) {
+    req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
+
+    await sharp(req.files.image[0].buffer)
+      .resize(2000, 1333)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`public/img/tours/${req.body.imageCover}`);
+  }
+
+  // 1) Cover image
+  if (req.files.imageCover) {
+    req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
+
+    await sharp(req.files.imageCover[0].buffer)
+      .resize(2000, 1333)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`public/img/tours/${req.body.imageCover}`);
+  }
+
+  // 2) Images
+  if (req.files.images) {
+    req.body.images = [];
+
+    await Promise.all(
+      req.files.images.map(async (file, i) => {
+        const filename = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+
+        await sharp(file.buffer)
+          .resize(2000, 1333)
+          .toFormat('jpeg')
+          .jpeg({ quality: 90 })
+          .toFile(`public/img/tours/${filename}`);
+
+        req.body.images.push(filename);
+      })
+    );
+  }
+
+  next();
+});
 export const aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
   req.query.sort = '-ratingsAverage,price';
@@ -114,40 +188,39 @@ export const getToursWithin = catchAsync(async (req, res, next) => {
     results: tours.length,
     data: { data: tours },
   });
-
 });
 export const getDistances = catchAsync(async (req, res, next) => {
-   const { latlng, unit } = req.params;
-   const [lat, lng] = latlng.split(',');
-   if (!lat || !lng) {
-     next(
-       new appError(
-         'Please provide latitude and longitude in the format lat,lng.',
-         400
-       )
-     );
+  const { latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+  if (!lat || !lng) {
+    next(
+      new appError(
+        'Please provide latitude and longitude in the format lat,lng.',
+        400
+      )
+    );
   }
-    const multiplier = unit === 'mi' ? 0.000621371 : 0.001;
-    const distances = await Tour.aggregate([
-      {
-        $geoNear: {
-          near: {
-            type: 'Point',
-            coordinates: [lng * 1, lat * 1],
-          },
-          distanceField: 'distance',
-          distanceMultiplier: multiplier,
+  const multiplier = unit === 'mi' ? 0.000621371 : 0.001;
+  const distances = await Tour.aggregate([
+    {
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates: [lng * 1, lat * 1],
         },
+        distanceField: 'distance',
+        distanceMultiplier: multiplier,
       },
-      {
-        $project: {
-          distance: 1,
-          name: 1,
-        },
+    },
+    {
+      $project: {
+        distance: 1,
+        name: 1,
       },
-    ]);
-    res.status(200).json({
-      status: 'success',
-      data: { data: distances },
-    });
+    },
+  ]);
+  res.status(200).json({
+    status: 'success',
+    data: { data: distances },
+  });
 });

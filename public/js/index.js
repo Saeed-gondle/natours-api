@@ -2,6 +2,7 @@
 import { displayMap } from './mapbox.js';
 import { login, logout } from './login.js';
 import { updateSettings } from './updateSettings.js';
+import { bookTour } from './stripe.js';
 
 // DOM ELEMENTS
 const mapBox = document.getElementById('map');
@@ -9,12 +10,13 @@ const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
+const bookBtn = document.getElementById('book-tour');
 
 // DELEGATION
 if (mapBox) {
   const locations = JSON.parse(mapBox.dataset.locations);
   displayMap(locations);
-} 
+}
 
 if (loginForm)
   loginForm.addEventListener('submit', e => {
@@ -23,16 +25,39 @@ if (loginForm)
     const password = document.getElementById('password').value;
     login(email, password);
   });
-  if(!loginForm) console.log('No login form found');
+if (!loginForm) console.log('No login form found');
 
-  if (logOutBtn) logOutBtn.addEventListener('click', logout);
+if (logOutBtn) logOutBtn.addEventListener('click', logout);
 
 if (userDataForm)
   userDataForm.addEventListener('submit', e => {
     e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    updateSettings({ name, email }, 'data');
+
+    // Add loading state
+    const saveBtn = document.querySelector('.btn--save-settings');
+    if (saveBtn) {
+      saveBtn.textContent = 'Updating...';
+      saveBtn.disabled = true;
+    }
+
+    const form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+
+    // Only append photo if a file was selected
+    const photoInput = document.getElementById('photo');
+    if (photoInput.files[0]) {
+      form.append('photo', photoInput.files[0]);
+    }
+
+    console.log('Sending form data:', form);
+    updateSettings(form, 'data').finally(() => {
+      // Reset button state
+      if (saveBtn) {
+        saveBtn.textContent = 'Save settings';
+        saveBtn.disabled = false;
+      }
+    });
   });
 
 if (userPasswordForm)
@@ -52,4 +77,10 @@ if (userPasswordForm)
     document.getElementById('password-current').value = '';
     document.getElementById('password').value = '';
     document.getElementById('password-confirm').value = '';
+  });
+if (bookBtn)
+  bookBtn.addEventListener('click', e => {
+    e.target.textContent = 'Processing...';
+    const { tourId } = e.target.dataset;
+    bookTour(tourId);
   });

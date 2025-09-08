@@ -9,14 +9,14 @@ router.route('/resetPassword/:token').patch(authController.resetPassword);
 router.route('/logout').get(authController.logout);
 // router.use(authController.protect);
 router.use(authController.protect);
+router.route('/updateMyPassword').patch(authController.updatePassword);
+router.route('/me').get(userController.getMe, userController.getUser);
+
 router
-  .route('/updatePassword')
-  .patch( authController.updatePassword);
-router
-  .route('/me')
-  .get(userController.getMe, userController.getUser);
-  router.route('/updateMe')
+  .route('/updateMe')
   .patch(
+    userController.uploadUserPhoto,
+    userController.resizeUserPhoto,
     userController.updateMe
   );
   router.use(authController.restrictTo('admin'));
