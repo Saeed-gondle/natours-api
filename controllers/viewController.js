@@ -5,7 +5,7 @@ import AppError from '../utils/appError.js';
 
 export const getOverview = catchAsync(async (req, res, next) => {
   console.log('getOverview controller called');
-  
+
   try {
     // 1) Get tour data from collection
     const tours = await Tour.find();
@@ -19,7 +19,9 @@ export const getOverview = catchAsync(async (req, res, next) => {
     });
   } catch (error) {
     console.error('Error in getOverview:', error);
-    return next(new AppError('Error loading tours. Please try again later.', 500));
+    return next(
+      new AppError('Error loading tours. Please try again later.', 500)
+    );
   }
 });
 

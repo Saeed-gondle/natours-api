@@ -27,7 +27,9 @@ try {
   // Standard approach for ES modules in Node.js
   __filename = fileURLToPath(import.meta.url);
   __dirname = path.dirname(__filename);
-  console.log('Running in standard Node.js environment with paths:', { __dirname });
+  console.log('Running in standard Node.js environment with paths:', {
+    __dirname,
+  });
 } catch (error) {
   // Fallback for serverless environments where import.meta.url might be undefined
   console.error('Error setting up paths:', error.message);
@@ -39,7 +41,7 @@ try {
 console.log({
   workingDirectory: process.cwd(),
   appDirectory: __dirname,
-  viewsPath: path.join(__dirname, 'views')
+  viewsPath: path.join(__dirname, 'views'),
 });
 const app = express();
 app.set('view engine', 'pug');

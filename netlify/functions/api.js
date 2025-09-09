@@ -15,13 +15,16 @@ try {
   __filename = fileURLToPath(import.meta.url);
   __dirname = path.dirname(__filename);
   rootDir = path.resolve(__dirname, '../..');
-  console.log('Serverless function paths:', { 
+  console.log('Serverless function paths:', {
     __dirname,
     rootDir,
-    cwd: process.cwd()
+    cwd: process.cwd(),
   });
 } catch (error) {
-  console.error('Error setting up paths in serverless function:', error.message);
+  console.error(
+    'Error setting up paths in serverless function:',
+    error.message
+  );
   rootDir = process.cwd();
   __dirname = rootDir;
 }
@@ -30,7 +33,7 @@ try {
 try {
   // First try config.env in the root directory
   const envPath = path.join(rootDir, 'config.env');
-  
+
   if (fs.existsSync(envPath)) {
     console.log(`Loading env from ${envPath}`);
     dotenv.config({ path: envPath });
