@@ -2,6 +2,7 @@
   command = "npm install && npm run build"
   functions = "netlify/functions"
   publish = "public"
+  environment = { NODE_VERSION = "16.20.0" }
 
 [[plugins]]
   package = "./netlify-debug-plugin.js"
