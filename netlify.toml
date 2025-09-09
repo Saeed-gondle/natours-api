@@ -1,0 +1,26 @@
+[build]
+  command = "npm install && npm run build"
+  functions = "netlify/functions"
+  publish = "public"
+
+[[plugins]]
+  package = "./netlify-debug-plugin.js"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["views/**", "utils/**", "models/**", "controllers/**", "routes/**", "docs/**"]
+
+[dev]
+  functions = "netlify/functions"
+  publish = "public"
+  port = 3000
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -1,0 +1,14 @@
+{
+  "functions": {
+    "netlify/functions/*": {
+      "included_files": [
+        "views/**", 
+        "utils/**", 
+        "models/**", 
+        "controllers/**", 
+        "routes/**", 
+        "docs/**"
+      ]
+    }
+  }
+}

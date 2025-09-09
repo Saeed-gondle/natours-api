@@ -1,0 +1,2 @@
+// This file ensures that the netlify/functions directory is included in Git
+// It will be replaced by the actual function files during build
