@@ -1,11 +1,10 @@
 [build]
-  command = "npm install && npm run build"
+  command = "npm install && bash ./netlify-build.sh && npm run build"
   functions = "netlify/functions"
   publish = "public"
-  environment = { NODE_VERSION = "16.20.0" }
+  environment = { NODE_VERSION = "18" }
 
-[[plugins]]
-  package = "./netlify-debug-plugin.js"
+# Removing plugin to avoid Node.js version conflicts
 
 [functions]
   node_bundler = "esbuild"
