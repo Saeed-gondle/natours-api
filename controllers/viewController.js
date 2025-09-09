@@ -4,14 +4,23 @@ import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
 
 export const getOverview = catchAsync(async (req, res, next) => {
-  // 1) Get tour data from collection
-  const tours = await Tour.find();
+  console.log('getOverview controller called');
+  
+  try {
+    // 1) Get tour data from collection
+    const tours = await Tour.find();
 
-  // 2) Build template
-  res.status(200).render('overview', {
-    title: 'All Tours',
-    tours,
-  });
+    console.log(`Found ${tours.length} tours`);
+
+    // 2) Build template
+    res.status(200).render('overview', {
+      title: 'All Tours',
+      tours,
+    });
+  } catch (error) {
+    console.error('Error in getOverview:', error);
+    return next(new AppError('Error loading tours. Please try again later.', 500));
+  }
 });
 
 export const getTour = catchAsync(async (req, res, next) => {

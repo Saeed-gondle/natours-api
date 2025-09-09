@@ -1,10 +1,52 @@
 import dotenv from 'dotenv';
 import serverless from 'serverless-http';
 import mongoose from 'mongoose';
-import app from '../../app.js';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import fs from 'fs';
 
-// Load environment variables
-dotenv.config({ path: './config.env' });
+// Set up __dirname equivalent for ES modules
+let __filename;
+let __dirname;
+let rootDir;
+
+try {
+  // Standard approach for ES modules in Node.js
+  __filename = fileURLToPath(import.meta.url);
+  __dirname = path.dirname(__filename);
+  rootDir = path.resolve(__dirname, '../..');
+  console.log('Serverless function paths:', { 
+    __dirname,
+    rootDir,
+    cwd: process.cwd()
+  });
+} catch (error) {
+  console.error('Error setting up paths in serverless function:', error.message);
+  rootDir = process.cwd();
+  __dirname = rootDir;
+}
+
+// Load environment variables - try multiple locations
+try {
+  // First try config.env in the root directory
+  const envPath = path.join(rootDir, 'config.env');
+  
+  if (fs.existsSync(envPath)) {
+    console.log(`Loading env from ${envPath}`);
+    dotenv.config({ path: envPath });
+  } else {
+    // If not found, try to load from process.env (Netlify environment variables)
+    console.log('No config.env found, using process.env');
+    dotenv.config();
+  }
+} catch (error) {
+  console.error('Error loading environment variables:', error);
+  // Continue anyway, we'll use process.env
+  dotenv.config();
+}
+
+// Import the Express app after environment setup
+import app from '../../app.js';
 
 // Initialize database connection
 let cachedDb = null;

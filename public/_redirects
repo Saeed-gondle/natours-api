@@ -1,2 +1,5 @@
+# Route all API requests to the serverless function
 /api/*  /.netlify/functions/api/:splat  200
-/*      /index.html     200
+
+# Route all other requests to the serverless function for Express to handle
+/*      /.netlify/functions/api/:splat  200

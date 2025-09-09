@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import fs from 'fs';
 import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import reviewRouter from './routes/reviewRoutes.js';
@@ -17,11 +18,52 @@ import mongoSanitize from 'express-mongo-sanitize';
 import { xss } from 'express-xss-sanitizer';
 import hpp from 'hpp';
 import compression from 'compression';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+
+// Handle paths for both normal Node.js and serverless environments
+let __filename;
+let __dirname;
+
+try {
+  // Standard approach for ES modules in Node.js
+  __filename = fileURLToPath(import.meta.url);
+  __dirname = path.dirname(__filename);
+  console.log('Running in standard Node.js environment with paths:', { __dirname });
+} catch (error) {
+  // Fallback for serverless environments where import.meta.url might be undefined
+  console.error('Error setting up paths:', error.message);
+  __dirname = process.cwd();
+  console.log('Falling back to process.cwd():', __dirname);
+}
+
+// Log important path information
+console.log({
+  workingDirectory: process.cwd(),
+  appDirectory: __dirname,
+  viewsPath: path.join(__dirname, 'views')
+});
 const app = express();
 app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
+
+// First try to use the standard views path
+const viewsPath = path.join(__dirname, 'views');
+// For Netlify serverless functions, check if Views folder exists (capital V)
+const alternateViewsPath = path.join(__dirname, 'Views');
+
+// Check if the Views directory exists and use it if it does
+try {
+  // Using sync here since this only runs on startup
+  if (fs.existsSync(alternateViewsPath)) {
+    console.log('Using alternate Views directory (capital V)');
+    app.set('views', alternateViewsPath);
+  } else {
+    console.log('Using standard views directory');
+    app.set('views', viewsPath);
+  }
+} catch (error) {
+  console.error('Error checking views directory:', error);
+  // Default to standard path
+  app.set('views', viewsPath);
+}
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(compression());
