@@ -5,7 +5,7 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "start:dev": "nodemon server.js",
+    "start": "node server.js",
     "start:script": "nodemon script.js",
     "start:prod": "cross-env PORT=3001 NODE_ENV=production nodemon server.js",
     "debug": "ndb server.js",
@@ -56,5 +56,8 @@
     "ndb": "^1.1.5",
     "parcel-bundler": "^1.12.5",
     "prettier": "^1.17.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
